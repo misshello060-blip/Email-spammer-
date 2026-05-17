@@ -14,8 +14,3 @@ How to Run on MacBook:
 7.  Open Terminal and run these commands:
 8.  cd ~/Desktop
 python3 spammer.py
-
- How To Run On Ipad:
-1.must have a-shell 
-2.run python first then paste code 
-3.Then to run press enter 2x
