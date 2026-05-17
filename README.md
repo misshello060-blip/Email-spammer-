@@ -15,7 +15,7 @@ How to Run on MacBook:
 8.  cd ~/Desktop
 python3 spammer.py
 
-How To Run On Ipad 
-must have a-shell 
-run python first then paste code 
-Then to run press enter 2x
+How To Run On Ipad:
+1.must have a-shell 
+2.run python first then paste code 
+3.Then to run press enter 2x
