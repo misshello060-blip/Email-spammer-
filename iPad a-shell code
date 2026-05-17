@@ -1,0 +1,117 @@
+import smtplib
+import random
+import time
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
+print("=== BUTTER CHICKEN frequency ===\n")
+
+# ====================== ADD YOUR OWN ACCOUNTS HERE ======================
+accounts = {
+    "1": {"e": "your_email1@gmail.com", "p": "your_app_password_here"},
+    "2": {"e": "your_email2@gmail.com", "p": "your_app_password_here"},
+    "3": {"e": "your_email3@gmail.com", "p": "your_app_password_here"},
+    "4": {"e": "your_email4@gmail.com", "p": "your_app_password_here"}
+}
+# =======================================================================
+
+# ====================== ACCESS SYSTEM ======================
+print("Are you VIP? (yes/no)")
+is_vip = input("> ").strip().lower() == "yes"
+
+if is_vip:
+    print("VIP Mode Activated")
+    vip_mode = True
+else:
+    vip_mode = False
+
+print("\nAre you Dev? (yes/no)")
+is_dev = input("> ").strip().lower() == "yes"
+dev_mode = is_dev
+
+# ====================== ACCOUNT SELECTION ======================
+if dev_mode:
+    print("\nChoose: 1, 2, 3, 4 or all")
+    choice = input("> ").strip().lower()
+    if choice == "all":
+        selected = list(accounts.values())
+    elif choice in accounts:
+        selected = [accounts[choice]]
+    else:
+        selected = [accounts["1"]]
+
+elif vip_mode:
+    print("\nVIP Mode - Choose: 2, 3 or all")
+    choice = input("> ").strip().lower()
+    if choice == "all":
+        selected = [accounts["2"], accounts["3"]]
+    elif choice in ["2", "3"]:
+        selected = [accounts[choice]]
+    else:
+        selected = [accounts["2"]]
+
+else:
+    print("Free Mode - Using Account 1")
+    selected = [accounts["1"]]
+
+# ====================== TARGETS ======================
+max_targets = 4 if dev_mode else 2 if vip_mode else 1
+print(f"\nHow many targets? (1-{max_targets})")
+while True:
+    try:
+        num_targets = int(input("> "))
+        if 1 <= num_targets <= max_targets:
+            break
+        print(f"Please enter 1 to {max_targets}")
+    except:
+        print("Invalid input.")
+
+targets = []
+print("\nEnter target email(s):")
+for i in range(num_targets):
+    email = input(f"Target {i+1}: ").strip()
+    targets.append(email)
+
+# ====================== START SPAMMING ======================
+total = 0
+max_per_acc = 999 if dev_mode else 300
+
+print("\n" + "="*70)
+print("SPAMMING STARTED...\n")
+
+for acc in selected:
+    print(f"\n Using: {acc['e']}")
+    sent = 0
+
+    for i in range(max_per_acc):
+        try:
+            msg = MIMEMultipart()
+            msg['From'] = f"ButterChicken <{acc['e']}>"
+            msg['To'] = ", ".join(targets)
+            msg['Subject'] = f"Free Butter Chicken #{random.randint(10000, 999999)}"
+            
+            body = "Claim your FREE Butter Chicken now!\nhttps://freebutterchicken.today/claim"
+            msg.attach(MIMEText(body, 'plain'))
+
+            server = smtplib.SMTP("smtp.gmail.com", 587)
+            server.starttls()
+            server.login(acc['e'], acc['p'])
+            server.send_message(msg)
+            server.quit()
+
+            sent += 1
+            total += 1
+            print(f"Sent: {sent}/{max_per_acc}")
+
+            time.sleep(0.7)
+
+        except Exception:
+            print(f"Account blocked or failed")
+            break
+
+    print(f"Finished -> {sent} emails sent")
+
+print("\n" + "="*70)
+print(f"TOTAL EMAILS SENT: {total}")
+print("="*70)
+input("\nPress Enter to exit...")
